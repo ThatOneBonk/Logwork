@@ -29,3 +29,5 @@ Reporters must be included in the ReporterTypes Enum in `main.py`.
 ## Usage
 - `git clone https://github.com/ThatOneBonk/Logwork.git`
 - `python main.py <log paths> --report <reporter alias>`
+### Example screenshot
+![Example screenshot](assets/example_screenshot.png)
