@@ -26,3 +26,6 @@ Reporters must be put in the `reporters/` directory with an arbitrary name.
 Reporters must be included in the ReporterTypes Enum in `main.py`. 
 - The Enum's name is the reporter's alias, the name of the argument that will need to be passed as the --report argument to invoke it. 
 - The Enum's value is the path to the reporter. Assuming it's in the `reporters/` directory, it will be something like `reporters.<name>` (without the .py postfx).
+## Usage
+- `git clone https://github.com/ThatOneBonk/Logwork.git`
+- `python main.py <log paths> --report <reporter alias>`
