@@ -20,7 +20,7 @@ def log_dicts():
         },
         "second": {
             "/example1/": {"INFO": 15, "ERROR": 1},
-            "/example2/": {"INFO": 5}
+            "/example2/": {"INFO": 5, "WARNING": 3}
         }
     }
 
@@ -51,6 +51,16 @@ def test_harvest_args_raises_if_report_bad(monkeypatch):
     Should raise SystemExit if a non-existent --report type is passed.
     """
     test_args = ["main.py", "log1.txt", "log2.txt", "--report", "ThisReportTypeDoesNotExist"]
+    monkeypatch.setattr(sys, "argv", test_args)
+
+    with pytest.raises(SystemExit):
+        harvest_args()
+
+def test_harvest_args_raises_if_logs_missing(monkeypatch):
+    """
+    Should raise SystemExit no log paths are passed.
+    """
+    test_args = ["main.py", "--report", "ThisReportTypeDoesNotExist"]
     monkeypatch.setattr(sys, "argv", test_args)
 
     with pytest.raises(SystemExit):
@@ -89,6 +99,7 @@ def test_merge_dicts_multi_input(log_dicts):
     assert function_final_output["/example1/"]["ERROR"] == 11
     assert function_final_output["/example2/"]["INFO"] == 20
     assert function_final_output["/example2/"]["ERROR"] == 5
+    assert function_final_output["/example2/"]["WARNING"] == 3
     assert function_final_output["/example2/"]["CRITICAL"] == 0
 
 
@@ -105,10 +116,9 @@ def test_execute_bad_module(mock_import_module):
 
 def test_execute_valid_input(log_dicts):
     """
-    Should call the mock reporter assembler function and output its return without errors.
+    Should reach the mock reporter assembler function in execution and output its return without errors.
     """
     mock_reporter = MagicMock()
-    mock_reporter.process_reports.return_value = log_dicts["first"]
     mock_reporter.assemble_output.return_value = "pretend this is proper output"
 
     with patch.object(main, "harvest_args", return_value=Namespace(log_files=['app1.log', 'app2.log'], report='HANDLERS')),\
