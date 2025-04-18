@@ -30,17 +30,20 @@ def harvest_args() -> Namespace:
 
     Returns:
         Namespace: The parsed arguments as a Namespace object (`log_files` - log filenames (list), `report` - report type (str)).
+    
+    Raises:
+        SystemExit: If required arguments aren't passed in the CLI or if --report type is not in ReportTypes.
     """
     parser = argparse.ArgumentParser(description="Logs analysis utility")
 
     parser.add_argument("log_files", nargs="+", help="paths to log files")
 
     parser.add_argument("--report", required=True,
-    choices=[t.name.lower() for t in ReportTypes],
+    choices=[t.name.lower() for t in ReportTypes], # lower() for user-facing choice
     help="type of report to generate")
 
     args = parser.parse_args()
-    args.report = args.report.upper()
+    args.report = args.report.upper() # upper() back again so it can be used later
     return args
 
 def merge_dicts(individual_dict: dict, merged: defaultdict = None) -> dict:
@@ -50,6 +53,11 @@ def merge_dicts(individual_dict: dict, merged: defaultdict = None) -> dict:
 
     Args:
         individual_dict (dict): The dictionary that needs to be merged into the defaultdict.
+            - Example format:
+            {
+                "/example1/": {"INFO": 20, "ERROR": 10}, 
+                "/example2/": {"INFO": 15, "ERROR": 5}
+            }
         merged (defaultdict): The result of previous merging. Defaults to None.
 
     Returns:
@@ -80,7 +88,7 @@ def execute() -> Optional[str]:
         report_module = importlib.import_module(ReportTypes[args.report].value)
     except ImportError as e:
         logger.critical(f"%s: Failed to import module for {args.report}: {e}", execute.__name__)
-        return
+        raise SystemExit(e) from e
 
     log_queue = Queue()
     worker_processes = []
@@ -94,7 +102,7 @@ def execute() -> Optional[str]:
         generator_function = stream_file(file)
         worker_process = Process(target=report_module.process_reports, args=(generator_function, log_queue))
         worker_processes.append(worker_process)
-        logger.debug(f"%s: Starting reporter `{ReportTypes[args.report].name}` on file `{file}`, execute.__name__")
+        logger.debug(f"%s: Starting reporter `{ReportTypes[args.report].name}` on file `{file}`", execute.__name__)
         worker_process.start()
 
     for worker_process in worker_processes:

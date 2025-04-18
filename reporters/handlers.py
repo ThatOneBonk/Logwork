@@ -38,11 +38,6 @@ def process_reports(generator: Generator[str, None, None], queue: Queue):
 def assemble_output(data: dict) -> str:
     """
     Formats `data` into a human-readable table for output.
-    Output format:
-    - The total amount of calls;
-    - Alphabetically sorted paths (`data` keys);
-    - Logging levels and their occurrence counts per path;
-    - A final row summing each log level occurrence across all paths.
 
     Args:
         data (dict): The dataset that needs to be formatted.

@@ -35,3 +35,4 @@ Logwork спроектирован для простого расширения.
 - `python main.py <пути к лог-файлам> --report <название репортера>`
 ### Скриншот-пример
 ![Скриншот-пример](assets/example_screenshot.png)
+![Скриншот покрытия Pytest](assets/pytest_screenshot.png)
