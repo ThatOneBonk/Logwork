@@ -46,7 +46,7 @@ def harvest_args() -> Namespace:
     args.report = args.report.upper() # upper() back again so it can be used later
     return args
 
-def merge_dicts(individual_dict: dict, merged: defaultdict = None) -> dict:
+def merge_dicts(individual_dict: dict, merged: defaultdict = None) -> defaultdict:
     """
     A helper function that takes a dictionary and merges it into a defaultdict. 
     The function's last output must be passed as the `merged` argument to merge multiple dictionaries.
