@@ -114,7 +114,7 @@ def test_execute_bad_module(mock_import_module):
         with pytest.raises(SystemExit):
             execute()
 
-def test_execute_valid_input(log_dicts):
+def test_execute_valid_input():
     """
     Should reach the mock reporter assembler function in execution and output its return without errors.
     """
