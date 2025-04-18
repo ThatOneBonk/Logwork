@@ -33,6 +33,6 @@ Logwork спроектирован для простого расширения.
 ## Запуск
 - `git clone https://github.com/ThatOneBonk/Logwork.git`
 - `python main.py <пути к лог-файлам> --report <название репортера>`
-### Скриншот-пример
-![Скриншот-пример](assets/example_screenshot.png)
+### Скриншоты-примеры
+![Скриншот запуска](assets/example_screenshot.png)
 ![Скриншот покрытия Pytest](assets/pytest_screenshot.png)
